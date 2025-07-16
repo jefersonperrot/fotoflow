@@ -1,0 +1,46 @@
+{% load static %}
+
+  {% include 'includes/head.html' %}
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        {% include 'includes/sidebar.html' %}
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          {% include 'includes/navbar.html' %}
+
+          <!-- wrapper do conteudo -->
+          <div class="content-wrapper">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+
+                <!-- Conteúdo da página -->
+                {% block conteudo %}
+
+                {% endblock conteudo %}
+                <!-- / Fim do conteúdo -->
+              </div>
+            </div>
+
+          <!-- Rodapé -->
+          {% include 'includes/footer.html' %}
+
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+    <!-- Scripts-->
+    {% include 'includes/scripts.html' %}
+  </body>
+</html>

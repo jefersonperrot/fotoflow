@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    {{ block.super }} - Clientes
+{% endblock titulo %}
+
+{% block conteudo %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="nav-align-top">
+    <ul class="nav nav-pills" role="tablist" style="margin-left: auto">
+      <li class="nav-item" role="presentation">
+        <a href="{% url 'fotoflow:cliente_add' %}" class="btn btn-success pull-right">Cadastrar</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <h5 class="card-header">
+      Clientes
+    </h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Celular</th>
+            <th>Tipo</th>
+            <th>Situação</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          {% for cliente in clientes %}
+            <tr>
+              <td>{{ cliente.nome_completo }}</td>
+              <td>{{ cliente.email }}</td>
+              <td>{{ cliente.celular }}</td>
+              <td>{{ cliente.tipo_cliente.nome }}</td>
+              <td>
+                {% if cliente.situacao == 0 %}
+                  <span class="badge bg-label-warning me-1">Inativo</span>
+                {% else %}
+                  <span class="badge bg-label-primary me-1">Ativo</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'fotoflow:cliente_edit' pk=cliente.id %}"><i class="icon-base bx bx-edit-alt me-1"></i> Editar</a>
+                    <a class="dropdown-item" href="{% url 'fotoflow:cliente_delete' pk=cliente.id %}"><i class="icon-base bx bx-trash me-1"></i> Excluir</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock conteudo %}

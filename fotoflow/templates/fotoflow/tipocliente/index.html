@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    {{ block.super }} - Tipo de cliente
+{% endblock titulo %}
+
+{% block conteudo %}
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="nav-align-top">
+    <ul class="nav nav-pills" role="tablist" style="margin-left: auto">
+      <li class="nav-item" role="presentation">
+        <a href="{% url 'fotoflow:tipocliente_add' %}" class="btn btn-success pull-right">Cadastrar</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="container-xxl flex-grow-1 container-p-y">
+  <div class="card">
+    <h5 class="card-header">
+      Tipos de clientes
+    </h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+<!--            <th>ID</th>-->
+            <th>Descrição</th>
+            <th>Situação</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          {% for tipo in tipo_clientes %}
+            <tr>
+<!--              <td>{{ tipo.id }}</td>-->
+              <td>{{ tipo.nome }}</td>
+              <td>
+                {% if tipo.situacao == 0 %}
+                  <span class="badge bg-label-warning me-1">Inativo</span>
+                {% else %}
+                  <span class="badge bg-label-primary me-1">Ativo</span>
+                {% endif %}
+              </td>
+
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'fotoflow:tipocliente_edit' pk=tipo.id %}"><i class="icon-base bx bx-edit-alt me-1"></i> Editar</a>
+                    <a class="dropdown-item" href="{% url 'fotoflow:tipocliente_delete' pk=tipo.id %}"><i class="icon-base bx bx-trash me-1"></i> Excluir</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock conteudo %}

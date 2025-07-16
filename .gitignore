@@ -1,0 +1,43 @@
+# Ambiente virtual
+venv/
+.venv/
+env/
+ENV/
+
+# Arquivos de ambiente
+core/.env
+.env
+.env.*
+
+# PyCharm e VSCode
+.idea/
+.vscode/
+
+# Python cache/compilados
+__pycache__/
+*.py[cod]
+*.pyo
+*.log
+*.pot
+*.pyc
+
+# Pacotes
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Arquivos de banco de dados local
+*.sqlite3
+db.sqlite3
+
+# Arquivos de mídia/local upload
+/media/
+
+# Arquivos estáticos gerados
+staticfiles/
+static/
+
+# Configurações do sistema
+.DS_Store
+Thumbs.db
