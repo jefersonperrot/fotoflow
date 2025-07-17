@@ -10,7 +10,8 @@ class LoginForm(AuthenticationForm):
         label="E-mail ou usuário",
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Digite seu usuário'
+            'placeholder': 'Digite seu usuário',
+            'autofocus': True
         })
     )
     password = forms.CharField(
@@ -97,3 +98,29 @@ class ClienteEditForm(forms.ModelForm):
             'tipo_cliente': forms.Select(attrs={'class': 'form-select'}),
         }
         exclude = ['usuario']
+
+
+class ClienteCadastroPublicoForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = [
+            'nome_completo', 'cpf', 'rg',
+            'email', 'celular', 'endereco_completo',
+        ]
+        labels = {
+            'nome_completo': 'Nome',
+            'cpf': 'CPF',
+            'rg': 'RG',
+            'razao_social': 'Razão Social',
+            'observacoes': 'Observações',
+            'endereco_completo': 'Endereço completo',
+        }
+        widgets = {
+            'nome_completo': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf': forms.TextInput(attrs={'class': 'form-control'}),
+            'rg': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'celular': forms.TextInput(attrs={'class': 'form-control'}),
+            'endereco_completo': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        exclude = ['usuario', 'tipo_cliente']

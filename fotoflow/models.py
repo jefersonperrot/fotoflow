@@ -49,3 +49,13 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nome_completo
+
+
+# Responsavel por criar um token publico, que será enviado para o cliente
+class TokenPublico(models.Model):
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.usuario.username} - {self.token}"

@@ -7,13 +7,15 @@ import os
 from functools import lru_cache
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import Http404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
-from fotoflow.forms import TipoClienteForm, ClienteCadastroForm, LoginForm, ClienteEditForm
-from fotoflow.models import TipoCliente, Cliente
+from fotoflow.forms import TipoClienteForm, ClienteCadastroForm, LoginForm, ClienteEditForm, ClienteCadastroPublicoForm
+from fotoflow.models import TipoCliente, Cliente, TokenPublico
 
 
 # Login
@@ -128,3 +130,46 @@ class ClienteDeleteView(DeleteView):
 
     def get_queryset(self):
         return Cliente.objects.filter(usuario=self.request.user)
+
+
+# Cadastro público de clientes
+# Não precisa de login
+def cadastro_publico(request, token):
+    token_obj = get_object_or_404(TokenPublico, token=token)
+
+    if request.method == 'POST':
+        form_noiva = ClienteCadastroPublicoForm(request.POST, prefix='noiva')
+        form_noivo = ClienteCadastroPublicoForm(request.POST, prefix='noivo')
+
+        if form_noiva.is_valid() and form_noivo.is_valid():
+
+            tipo_noiva_padrao = TipoCliente.objects.get(nome='Noiva')
+            tipo_noivo_padrao = TipoCliente.objects.get(nome='Noivo')
+
+            cliente_noiva = form_noiva.save(commit=False)
+            cliente_noiva.usuario = token_obj.usuario
+            cliente_noiva.tipo_cliente = tipo_noiva_padrao
+            cliente_noiva.save()
+
+            cliente_noivo = form_noivo.save(commit=False)
+            cliente_noivo.usuario = token_obj.usuario
+            cliente_noivo.tipo_cliente = tipo_noivo_padrao
+            cliente_noivo.save()
+
+            return render(request, 'fotoflow/cliente/add_success.html')
+
+    else:
+        form_noiva = ClienteCadastroPublicoForm(prefix='noiva')
+        form_noivo = ClienteCadastroPublicoForm(prefix='noivo')
+
+    return render(request, 'fotoflow/cliente/add_public.html', {
+        'form_noiva': form_noiva,
+        'form_noivo': form_noivo,
+    })
+
+
+def gerar_token_publico(request):
+    token_obj = TokenPublico.objects.create(usuario=request.user)
+    link = request.build_absolute_uri(f'/cadastro_cliente/{token_obj.token}/')
+    return render(request, 'fotoflow/cliente/link_cadastro.html', {'link': link})
+

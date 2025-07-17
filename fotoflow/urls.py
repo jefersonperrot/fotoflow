@@ -1,8 +1,6 @@
 from django.urls import path
 
-from fotoflow.views import DashboardView, TipoClienteListView, TipoClienteCreateView, TipoClienteUpdateView, \
-    TipoClienteDeleteView, ClienteCreateView, FotoflowLoginView, FotoflowLogoutView, ClienteUpdateView, ClienteListView, \
-    ClienteDeleteView
+from fotoflow.views import *
 
 app_name = 'fotoflow'
 
@@ -27,6 +25,6 @@ urlpatterns = [
     path('cliente/add', ClienteCreateView.as_view(), name='cliente_add'),
     path('cliente/edit/<uuid:pk>', ClienteUpdateView.as_view(), name='cliente_edit'),
     path('cliente/delete/<uuid:pk>', ClienteDeleteView.as_view(), name='cliente_delete'),
+    path('cliente/link-cadastro', gerar_token_publico, name='cliente_link'),
+    path('cadastro_cliente/<uuid:token>/', cadastro_publico, name='cadastro_publico'),
 ]
-
-
