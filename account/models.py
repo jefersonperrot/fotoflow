@@ -10,8 +10,8 @@ class Account(models.Model):
         (2, 'Masculino')
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    url_site = models.CharField(max_length=100, null=True)
-    sexo = models.IntegerField(choices=SEXO, null=True)
+    url_site = models.CharField(max_length=100, blank=True, null=True)
+    sexo = models.IntegerField(choices=SEXO, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
