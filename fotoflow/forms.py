@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 # from django.contrib.auth.models import User
 
-from fotoflow.models import TipoCliente, Cliente
+from fotoflow.models import TipoCliente, Cliente, TipoTrabalho
 
 
 class LoginForm(AuthenticationForm):
@@ -136,3 +136,19 @@ class ClienteSearchForm(forms.Form):
             'aria-label': 'Informe Nome, e-mail, celular, CPF ou CNPJ',
         })
     )
+
+
+class TipoTrabalhoForm(forms.ModelForm):
+    class Meta:
+        model = TipoTrabalho
+        fields = ['nome', 'descricao', 'valor', 'situacao']
+        labels = {
+            'situacao': 'Situação',
+            'descricao': 'Descrição',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'situacao': forms.Select(attrs={'class': 'form-select'}),
+            'descricao': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'valor': forms.TextInput(attrs={'class': 'form-control mask-money'}),
+        }

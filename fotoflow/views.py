@@ -16,8 +16,8 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
 from fotoflow.forms import TipoClienteForm, ClienteCadastroForm, LoginForm, ClienteEditForm, ClienteCadastroPublicoForm, \
-    ClienteSearchForm
-from fotoflow.models import TipoCliente, Cliente, TokenPublico
+    ClienteSearchForm, TipoTrabalhoForm
+from fotoflow.models import TipoCliente, Cliente, TokenPublico, TipoTrabalho
 
 
 # Login
@@ -188,8 +188,37 @@ def cadastro_publico(request, token):
     })
 
 
+# Metodo para gerar link com token
 def gerar_token_publico(request):
     token_obj = TokenPublico.objects.create(usuario=request.user)
     link = request.build_absolute_uri(f'/cadastro_cliente/{token_obj.token}/')
     return render(request, 'fotoflow/cliente/link_cadastro.html', {'link': link})
 
+
+# Tipo de serviços
+class TipoTrabalhoListView(LoginRequiredMixin, ListView):
+    model = TipoTrabalho
+    template_name = 'fotoflow/tipotrabalho/index.html'
+    context_object_name = 'tipos_trabalho'
+
+
+class TipoTrabalhoCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'fotoflow/tipotrabalho/add.html'
+    model = TipoTrabalho
+    form_class = TipoTrabalhoForm
+    success_url = reverse_lazy('fotoflow:tipotrabalho_list')
+
+    def form_valid(self, form):
+        form.instance.usuario = self.request.user  # Atribui o usuário logado
+        return super().form_valid(form)
+
+
+class TipoTrabalhoUpdateView(UpdateView):
+    model = TipoTrabalho
+    form_class = TipoTrabalhoForm
+    template_name = 'fotoflow/tipotrabalho/edit.html'
+    success_url = reverse_lazy('fotoflow:tipotrabalho_list')
+
+    def get_queryset(self):
+        # Garante que só clientes do usuário logado possam ser editados
+        return TipoTrabalho.objects.filter(usuario=self.request.user)

@@ -8,11 +8,11 @@ urlpatterns = [
     # Index (acesso liberado)
 
     # Login e logout
-    path('/', FotoflowLoginView.as_view(), name='login'),
+    path('', FotoflowLoginView.as_view(), name='login'),
     path('logout/', FotoflowLogoutView.as_view(), name='logout'),
 
     # Dashboard
-    path('', DashboardView.as_view(), name='dashboard'),
+    path('home', DashboardView.as_view(), name='dashboard'),
 
     # Tipo cliente
     path('tipocliente/', TipoClienteListView.as_view(), name='tipocliente_list'),
@@ -27,4 +27,9 @@ urlpatterns = [
     path('cliente/delete/<uuid:pk>', ClienteDeleteView.as_view(), name='cliente_delete'),
     path('cliente/link-cadastro', gerar_token_publico, name='cliente_link'),
     path('cadastro_cliente/<uuid:token>/', cadastro_publico, name='cadastro_publico'),
+
+    # Tipo trabalho
+    path('tipotrabalho/', TipoTrabalhoListView.as_view(), name='tipotrabalho_list'),
+    path('tipotrabalho/add', TipoTrabalhoCreateView.as_view(), name='tipotrabalho_add'),
+    path('tipotrabalho/edit/<uuid:pk>', TipoTrabalhoUpdateView.as_view(), name='tipotrabalho_edit'),
 ]

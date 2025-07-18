@@ -62,8 +62,17 @@ class TokenPublico(models.Model):
 
 
 class TipoTrabalho(models.Model):
+    SITUACAO = [
+        (0, 'Inativo'),
+        (1, 'Ativo')
+    ]
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome = models.CharField(max_length=255)
+    nome_controle = models.CharField(max_length=255, blank=True, null=True)
+    descricao = models.TextField(blank=True, null=True)
+    valor = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    situacao = models.IntegerField(choices=SITUACAO, default='1')
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
