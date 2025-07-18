@@ -124,3 +124,15 @@ class ClienteCadastroPublicoForm(forms.ModelForm):
             'endereco_completo': forms.TextInput(attrs={'class': 'form-control'}),
         }
         exclude = ['usuario', 'tipo_cliente']
+
+
+class ClienteSearchForm(forms.Form):
+    busca = forms.CharField(
+        label='Buscar cliente',
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control border-0 shadow-none ps-1 ps-sm-2 d-md-block d-none',
+            'placeholder': 'Informe Nome, e-mail, celular, CPF ou CNPJ',
+            'aria-label': 'Informe Nome, e-mail, celular, CPF ou CNPJ',
+        })
+    )

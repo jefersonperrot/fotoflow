@@ -9,12 +9,14 @@ from functools import lru_cache
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 
-from fotoflow.forms import TipoClienteForm, ClienteCadastroForm, LoginForm, ClienteEditForm, ClienteCadastroPublicoForm
+from fotoflow.forms import TipoClienteForm, ClienteCadastroForm, LoginForm, ClienteEditForm, ClienteCadastroPublicoForm, \
+    ClienteSearchForm
 from fotoflow.models import TipoCliente, Cliente, TokenPublico
 
 
@@ -98,7 +100,25 @@ class ClienteListView(LoginRequiredMixin, ListView):
     context_object_name = 'clientes'
 
     def get_queryset(self):
-        return Cliente.objects.filter(usuario=self.request.user)
+        queryset = Cliente.objects.filter(usuario=self.request.user)
+        form = ClienteSearchForm(self.request.GET)
+
+        if form.is_valid():
+            termo = form.cleaned_data.get('busca')
+            if termo:
+                queryset = queryset.filter(
+                    Q(nome_completo__icontains=termo) |
+                    Q(email__icontains=termo) |
+                    Q(celular__icontains=termo) |
+                    Q(cpf__icontains=termo) |
+                    Q(cnpj__icontains=termo)
+                )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ClienteSearchForm(self.request.GET)
+        return context
 
 
 class ClienteCreateView(LoginRequiredMixin, CreateView):

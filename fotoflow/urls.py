@@ -8,7 +8,7 @@ urlpatterns = [
     # Index (acesso liberado)
 
     # Login e logout
-    path('login/', FotoflowLoginView.as_view(), name='login'),
+    path('/', FotoflowLoginView.as_view(), name='login'),
     path('logout/', FotoflowLogoutView.as_view(), name='logout'),
 
     # Dashboard
