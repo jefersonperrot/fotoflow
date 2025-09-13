@@ -1,0 +1,18 @@
+# .gitignore
+
+# Arquivos de Cache do Python
+__pycache__/
+*.pyc
+
+# Arquivo de variáveis de ambiente
+.env
+
+# Banco de dados SQLite (se estiver usando)
+db.sqlite3
+*.sqlite3
+
+# Pasta de arquivos estáticos coletados
+/staticfiles/
+
+# Pasta de mídias enviadas pelos usuários
+/media/
