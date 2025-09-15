@@ -1,7 +1,14 @@
 from django.db import models
+from django.conf import settings
 
 
 class Cliente(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="clientes",
+        null=True, blank=True
+    )
     PESSOA_FISICA = 1
     PESSOA_JURIDICA = 2
     TIPO_PESSOA_CHOICES = (
@@ -31,8 +38,14 @@ class Cliente(models.Model):
 
 
 class ModeloContrato(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="modelos_contrato",
+        null=True, blank=True
+    )
     nome = models.CharField(max_length=200)
-    arquivo = models.FileField(upload_to="modelos_contrato/")
+    arquivo = models.FileField(upload_to="files/modelos_contrato/")
     is_active = models.BooleanField(default=True, verbose_name='Ativo')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
@@ -42,11 +55,17 @@ class ModeloContrato(models.Model):
 
 
 class Contrato(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="contratos",
+        null=True, blank=True
+    )
     codigo = models.CharField(max_length=200)
     titulo = models.CharField(max_length=200)
     data = models.DateField()
     valor = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    modelo = models.ForeignKey(ModeloContrato, on_delete=models.PROTECT, related_name="contratos")
+    modelo = models.ForeignKey(ModeloContrato, on_delete=models.SET_NULL, null=True, related_name="contratos")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 
@@ -62,7 +81,7 @@ class ContratoCliente(models.Model):
         ("testemunha", "Testemunha"),
     ]
 
-    contrato = models.ForeignKey(Contrato, on_delete=models.PROTECT, related_name="participantes")
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True, related_name="participantes")
     cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT, related_name="contratos_participados")
     papel = models.CharField(max_length=50, choices=PAPEL_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
@@ -76,6 +95,12 @@ class ContratoCliente(models.Model):
 
 
 class Servico(models.Model):
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="servicos",
+        null=True, blank=True
+    )
     nome = models.CharField(max_length=100, verbose_name='Nome')
     detalhes = models.CharField(max_length=150, null=True, blank=True, verbose_name='Detalhes')
     descricao = models.CharField(max_length=300, verbose_name='Descrição')
@@ -92,8 +117,8 @@ class Servico(models.Model):
 
 
 class ContratoServico(models.Model):
-    contrato = models.ForeignKey(Contrato, on_delete=models.PROTECT, related_name="servicos")
-    servico = models.ForeignKey(Servico, on_delete=models.PROTECT, related_name="contratos_servicos")
+    contrato = models.ForeignKey(Contrato, on_delete=models.SET_NULL, null=True, related_name="servicos")
+    servico = models.ForeignKey(Servico, on_delete=models.SET_NULL, null=True, related_name="contratos_servicos")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
 

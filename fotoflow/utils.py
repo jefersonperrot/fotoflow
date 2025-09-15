@@ -80,7 +80,7 @@ def gerar_contrato(contrato):
 
     doc.render(context)
 
-    output_dir = os.path.join(settings.MEDIA_ROOT, "contratos_gerados")
+    output_dir = os.path.join(settings.MEDIA_ROOT, "files/contratos_gerados")
     os.makedirs(output_dir, exist_ok=True)
 
     # Define nome do arquivo
