@@ -30,6 +30,26 @@ class BaseUserAdmin(admin.ModelAdmin):
 @admin.register(Cliente)
 class ClienteAdmin(BaseUserAdmin):
     list_display = ('nome_completo', 'telefone', 'is_active', 'created_at', 'updated_at')
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            return (
+                'nome_completo',
+                'telefone',
+                'is_active',
+                'usuario',
+                'created_at',
+                'updated_at'
+            )
+        else:
+            return (
+                'nome_completo',
+                'telefone',
+                'is_active',
+                'created_at',
+                'updated_at'
+            )
+
     search_fields = ('nome_completo',)
     list_filter = ('is_active',)
 
@@ -83,6 +103,27 @@ class ContratoAdmin(BaseUserAdmin):
     search_fields = ("titulo", 'codigo')
     inlines = [ContratoClienteInline, ContratoServicoInline]
     actions = ["gerar_documento"]
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            return (
+                'codigo',
+                'titulo',
+                'data',
+                'valor_formatado',
+                'usuario',
+                'created_at',
+                'updated_at'
+            )
+        else:
+            return (
+                'codigo',
+                'titulo',
+                'data',
+                'valor_formatado',
+                'created_at',
+                'updated_at'
+            )
 
     @admin.action(description="Gerar documento do contrato")
     def gerar_documento(self, request, queryset):
@@ -146,4 +187,19 @@ class ContratoServicoAdmin(BaseUserAdmin):
 @admin.register(ModeloContrato)
 class ModeloContratoAdmin(BaseUserAdmin):
     list_display = ("nome", "arquivo")
+
+    def get_list_display(self, request):
+        if request.user.is_superuser:
+            return (
+                'nome',
+                'arquivo',
+                'usuario',
+                'created_at',
+                'updated_at'
+            )
+        else:
+            return (
+                'nome',
+                'arquivo',
+            )
     search_fields = ("nome",)

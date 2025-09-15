@@ -16,15 +16,15 @@ class Cliente(models.Model):
         (PESSOA_JURIDICA, "Pessoa Jurídica"),
     )
 
-    tipo_pessoa = models.IntegerField(choices=TIPO_PESSOA_CHOICES, verbose_name='PF/PJ')
+    # tipo_pessoa = models.IntegerField(choices=TIPO_PESSOA_CHOICES, verbose_name='PF/PJ')
     nome_completo = models.CharField(max_length=150, verbose_name='Nome')
-    cpf_cnpj = models.CharField(max_length=50, null=True, blank=True, verbose_name='CPF/CNPJ')
+    cpf_cnpj = models.CharField(max_length=50, verbose_name='CPF/CNPJ')
     rg_ie = models.CharField(max_length=50, null=True, blank=True, verbose_name='RG/IE')
     data_nascimento = models.DateField(null=True, blank=True, verbose_name='Data de nascimento')
     nacionalidade = models.CharField(max_length=50,null=True, blank=True,  verbose_name='Nacionalidade')
     telefone = models.CharField(max_length=50, blank=True, verbose_name='Telefone(s)')
     email = models.EmailField(blank=True, verbose_name='E-mail')
-    endereco_completo = models.CharField(max_length=255, verbose_name='Endereço completo')
+    endereco_completo = models.CharField(max_length=255, null=True, blank=True, verbose_name='Endereço completo')
     is_active = models.BooleanField(default=True, verbose_name='Ativo')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Atualizado em')
